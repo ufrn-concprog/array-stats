@@ -19,7 +19,7 @@ Como saída, o programa exibe:
 O código-fonte provido neste repositório está incompleto, sendo necessário implementar os pontos 
 indicados com o marcador ``// TODO`` nas seguintes classes:
 
-### 1. [`tasks.StatsTask`](src/tasks/StatsTask.java)
+### 1. Classe [`tasks.StatsTask`](src/tasks/StatsTask.java)
 Implementar, no método `call()`, a computação dos valores mínimo e máximo, média, desvio padrão e tempo despendido 
 para o conjunto de elementos que está sendo processado.
 
@@ -27,7 +27,7 @@ para o conjunto de elementos que está sendo processado.
 instância da classe [`model.Stats`](src/model/Stats.java), a qual apenas serve para agregar todos esses valores na forma de
 um único objeto.
 
-### 2. [`core.StatsRunner`](src/core/StatsRunner.java)
+### 2. Classe [`core.StatsRunner`](src/core/StatsRunner.java)
 1. Criar exatamente $n$ tarefas, sendo $n$ o valor da constante $CORES$ definida na classe [`config.Config`](src/config/Config.java). Uma tarefa consiste na computação dos valores para um *slice* de tamanho aproximado $L / CORES$, sendo $L$ o tamanho do 
 *array*, e o seu resultado é armazenado em uma lista de objetos do tipo [`model.Stats`](src/model/Stats.java).
 2. Utilizar o método `invokeAll` do *thread pool* para executar todas as tarefas a ele submetidas de uma única vez e 
@@ -35,7 +35,7 @@ coletar os resultados como objetos `Future<Stats>`.
 3. Em seguida, iterar sobre esse conjunto de objetos, invocando o método `get()` em cada um deles para obter o seu valor.
 4. Fazer a agrregação (*merge*) dos resultados parciais 
 utilizando o método `plus` definido na classe [`model.Stats`](src/model/Stats.java).
-
+5. **Extra:** Obter o tamanho do *thread pool* para o *cached thread pool* e modificar a saída do programa para que esse número seja também exibido.
 ## Resultado esperado
 ```
 === Concurrent Array Statistics ===
