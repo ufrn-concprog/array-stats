@@ -44,44 +44,38 @@ public final class StatsRunner {
      *
      * @param poolFactory supplies a fresh {@link ExecutorService} (fixed or cached)
      * @param label       label used in printed results
-     * @return a {@link RunResult} with final statistics and elapsed seconds
+     * @return a {@link RunResult} with final statistics and elapsed milliseconds
      * @throws InterruptedException if interrupted while waiting for tasks or shutdown
      */
     public RunResult runWithPool(Supplier<ExecutorService> poolFactory, String label) throws InterruptedException {
         ExecutorService pool = poolFactory.get();
         long startTime = System.nanoTime();
 
-        // Build exactly CORES tasks (one per core)
-        List<Callable<Stats>> tasks = new ArrayList<>(Config.CORES);
-        int n = data.length;
-        int block = Math.max(1, n / Config.CORES);
-        int start = 0;
-        for (int i = 0; i < Config.CORES; i++) {
-            int end = (i == Config.CORES - 1) ? n : Math.min(n, start + block);
-            tasks.add(new StatsTask(data, start, end));
-            start = end;
-        }
+        /* TODO:
+            Create exactly CORES tasks (one per core) for disjoint slices of the array.
+            Each task should cover roughly data.length / Config.CORES elements.
+            Store them in a List<Callable<Stats>>.
+         */
 
         Stats total = new Stats(0, 0.0, 0.0,
                 Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
 
-        try {
-            List<Future<Stats>> futures = pool.invokeAll(tasks);
-            for (Future<Stats> f : futures) {
-                try {
-                    total = total.plus(f.get());
-                } catch (ExecutionException | CancellationException e) {
-                    // Treat a failed slice as contributing nothing.
-                }
-            }
-        } finally {
-            pool.shutdown();
-            pool.awaitTermination(Config.AWAIT_SECONDS, TimeUnit.SECONDS);
-        }
+        /* TODO
+            Use pool.invokeAll(tasks) to execute all tasks and collect Future<Stats> results.
+            Then, iterate over futures, call get() on each, and merge partial results using Stats.plus().
+         */
 
         return getRunResult(label, startTime, total);
     }
 
+    /**
+     * Organize results
+     *
+     * @param label label for printing (e.g., "single")
+     * @param startTime Initial timestamp
+     * @param total Computed statistics
+     * @return a {@link RunResult} with final statistics and elapsed seconds
+     */
     private RunResult getRunResult(String label, long startTime, Stats total) {
         long count = total.count();
         double mean = (count == 0) ? Double.NaN : total.sum() / count;

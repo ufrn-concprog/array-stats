@@ -20,8 +20,8 @@ O código-fonte provido neste repositório está incompleto, sendo necessário i
 indicados com o marcador ``// TODO`` nas seguintes classes:
 
 ### 1. Classe [`tasks.StatsTask`](src/tasks/StatsTask.java)
-Implementar, no método `call()`, a computação dos valores mínimo e máximo, média, desvio padrão e tempo despendido 
-para o conjunto de elementos que está sendo processado.
+Implementar, no método `call()`, a computação dos valores estatísticos para o conjunto de elementos que está sendo 
+processado.
 
 *Dica:* iterar sobre *slice* que está sendo processado, acumular os valores e retornar uma 
 instância da classe [`model.Stats`](src/model/Stats.java), a qual apenas serve para agregar todos esses valores na forma de
